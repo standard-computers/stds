@@ -1,0 +1,30 @@
+item: ITS {
+    private id string:8! ID *
+    protected name string:50 NM *
+    protected vendor standard @ENTT VNDR
+    protected upc string UPC
+    protected color string CLR
+    protected width standard @UOM WTH
+    protected length standard @UOM LNGT
+    protected height standard @UOM HGT
+    protected weight standard @UOM WGT
+    protected area standard @UOM AREA
+    protected volume standard @UOM VLM
+    protected initial_volume IVLM
+    protected value double VAL
+    protected cost double CST
+    protected tax double TX
+    protected excise_tax double ETX
+    protected shelf_life double SL
+    protected storage_location string SLOC
+    protected margin double MRGN
+    protected consumable boolean CNSMBL false
+    protected expires boolean EXPR false
+    protected batch standard @BTH
+    protected rentable boolean RNTBL
+    protected skud boolean SKUD
+    protected unit_of_measure string UOM
+    protected components array @ITS
+    protected units_of_measure array UOMS
+    protected packaging array PKG
+}

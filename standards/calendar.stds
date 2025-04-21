@@ -1,0 +1,6 @@
+calendar: CLNDR {
+    private id string:8! *
+    private owner standard @USR USR *
+    private events array @EVNT
+    private attendees array @USR ATTS
+}

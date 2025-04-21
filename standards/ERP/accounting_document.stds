@@ -1,0 +1,6 @@
+accounting_document: ACC_DOC {
+    private id string:9! *
+    protected reference string:8 REF *
+    protected amount double AMT
+    protected type string TYPE
+}

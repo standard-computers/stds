@@ -1,0 +1,18 @@
+bin: BN {
+    protected id string:8! ID *
+    protected area standard @AREA WC
+    protected allowed_items array @ORDL ITS
+    protected coordinates array COORDS
+    protected width standard @UOM WTH
+    protected length standard @UOM LNGT
+    protected height standard @UOM HGT
+    protected weight standard @UOM WGT
+    protected area standard @UOM AREA
+    protected volume standard @UOM VLM
+    protected fixed boolean FXD
+    protected picking boolean PKNG
+    protected goodsissue boolean GI
+    protected holds_stock boolean HSTK
+    protected auto_replenish boolean AUT_REPL
+    protected replenishable boolean REPL
+}

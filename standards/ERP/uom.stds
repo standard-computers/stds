@@ -1,0 +1,4 @@
+uom: UOM! {
+    protected quantity double Q *
+    protected measure string MSR *
+}

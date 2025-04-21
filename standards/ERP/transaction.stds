@@ -1,0 +1,10 @@
+transaction: TRS {
+    private id string:8! *
+    private merchant *
+    private amount double *
+    private description double *
+    private timestamp *
+    private settled
+    private adjustment double
+    private tax double
+}

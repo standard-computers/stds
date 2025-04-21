@@ -1,0 +1,6 @@
+order_line_item: ORDL {
+    protected quantity double Q *
+    protected on_hand double OH *
+    protected value double VAL *
+    protected item standard @ITS ITS *
+}
