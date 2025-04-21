@@ -1,0 +1,9 @@
+address: ADDR {
+	private id string:8! ID *
+	protected line_1 string L1 *
+	protected line_2 string L2
+	protected city string CTY *
+	protected territory string TRTY *
+	protected postal string PSTL *
+	protected country string "United States" CNTRY *
+}

@@ -1,0 +1,8 @@
+timer: TMR {
+	private id tring:8! *
+	protected owner standard @USR *
+	protected name string
+	protected duration int *
+	protected start int *
+	protected stop int *
+}

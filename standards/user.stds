@@ -1,0 +1,8 @@
+user: USR {
+	private id string:8! ID *
+	protected firstname string FNAME
+	protected middlename string MNAME
+	protected lastname string LNAME
+	protected birthday string BDAY
+	protected address standard @ADDR
+}
