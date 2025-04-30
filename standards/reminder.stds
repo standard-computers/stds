@@ -1,0 +1,6 @@
+reminder: RMNDR {
+    protected name string NAME *
+    protected timestamp int TMS *
+    protected description string DESC
+    protected location string LOC *
+}
