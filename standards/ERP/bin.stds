@@ -1,5 +1,4 @@
 bin: BN {
-    protected id string:8! ID *
     protected area standard @AREA WC
     protected allowed_items array @ORDL ITS
     protected coordinates array COORDS

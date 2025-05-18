@@ -1,5 +1,4 @@
 transaction: TRS {
-    private id string:8! *
     private merchant *
     private amount double *
     private description double *

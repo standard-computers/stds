@@ -1,0 +1,5 @@
+alarm: ALM {
+    protected name string
+    protected timestamp string TMS "$tomorrow" *
+    protected urgency int
+}

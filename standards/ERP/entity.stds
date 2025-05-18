@@ -1,5 +1,4 @@
 entity: ENTY {
-    protected id string:8! *
     protected name
     protected address_line_1 string ADDR1 *
     protected address_line_2 string ADDR2 "N/A"

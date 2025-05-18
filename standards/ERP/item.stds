@@ -1,5 +1,4 @@
 item: ITS {
-    private id string:8! ID *
     protected name string:50 NM *
     protected vendor standard @ENTT VNDR
     protected upc string UPC

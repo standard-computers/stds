@@ -1,5 +1,4 @@
 event: EVT {
-	private id string:8! *
 	protected organizer standard @USR ORG *
 	protected name string *
 	protected start string *

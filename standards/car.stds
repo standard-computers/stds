@@ -1,5 +1,4 @@
 car: CAR {
-    private id string:8! ID *
     protected year string:4 YR *
     protected make MK *
     protected model MDL *
