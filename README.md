@@ -106,6 +106,17 @@ evt @EVNT
 print evt INVTS.0 #Print first invite
 ```
 
+## Definitions
+
+Definitions in Standard serve as enumerations. You can combine definitions with a Standard if that definition should belong.
+
+```
+vehicle_type: VHLTP {
+  def sedan "SEDAN"
+  def suv "SUV"
+}
+```
+
 ## Querying
 
 When querying Standards, you will almost always use the Standard Reference.
