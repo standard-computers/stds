@@ -3,5 +3,3 @@ log: LOG {
     protected code string:5 CDE *
     protected message string MSG *
 }
-
-[LOG] + ("2025-04-28T12:31:54+00:00", "0x001", "Standard Started")
