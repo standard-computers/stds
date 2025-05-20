@@ -27,7 +27,7 @@ A Standard should always start with the `standard_name: STDREF {...` . Standards
 - `ACCESS_TYPE` - Constraint access type (scope)
     - `private` - Only accessible in constructor, or custom getters and setters.
     - `protected` - Can be publicly read but only written to in the constructor and getters & setters.
-    - `public` - public – Allows manipulation from any point or user. Public has native getters & setters.
+    - `public` - public – Allows manipulation from any point or user. Public constraints have native getters and setters.
     - `global` - Can be read from anywhere but only manipulated from within package
 
 - `VAR_NAME` - Name of constraint. Only lowercase letters, numbers, or underscores. 
@@ -117,6 +117,29 @@ vehicle_type: VHLTP {
 }
 ```
 
+You can implement a definition by doing the following...
+
+```
+vehicle: VHL {
+    private vin string:36! VN *
+    protected make string MK *
+    protected model string MDL *
+    protected type standard @VHLTP TP #Has reference VHLTP and TP
+}
+```
+
+Standard code implementation (`.std`)...
+```
+#As you'll see in this standard, the record will be created and saved in variable 'myCar'
+
+#Using standard def value
+myCar [VHL] + ("UVOTVGHYKLPCONLSZ", "Toyota", "Camry", "SEDAN")
+
+#Or using standard def name, pulls in that value
+myCar [VHL] + ("UVOTVGHYKLPCONLSZ", "Toyota", "Camry", sedan)
+```
+This restricts the value provided for constraint 'type' to the values defined in the 'vehicle_type' standard. If the value is not defined in the standard definitions, the record creation will fail.
+
 ## Querying
 
 When querying Standards, you will almost always use the Standard Reference.
@@ -124,49 +147,95 @@ Queries performed with `(..)` require exact Standard or record match. Queries us
 
 ### Adding Records
 
+Using standard constructor
 ```
 [VHL] + ("JKBVNKD167A013982", "Ford", "Explorer")
 ```
 
 ### Deleting Records
 
-**Using exact record match**
+Using exact record match
 ```
 [VHL] - ("JKBVNKD167A013982", "Ford", "Explorer")
 ```
 
-**Using query match**
+Using query match
 ```
 [VHL] - <vin "JKBVNKD167A013982">
 ```
 
-**Using query with limit**
+Using a query with limit
 ```
 [VHL] - <make "Ford", LIMIT 10>
 ```
 
 ### Finding Records
 
-**Unlimited find**
+Unlimited find
 ```
 [VHL] <vin "JKBVNKD167A013982">
 ```
 
-**Limited Find**
+Limited Find
 ```
 [VHL] <make "Ford", LIMIT 10>
+```
+### Exporting Records
+
+You can export records very easily. You can choose from JSON, csv, and XML.
+```
+[VHL] >> "path/to/file/vehicles.csv"
+```
+
+### Importing Records
+
+You can import records very easily. Choose from JSON, csv, and XML. The format matches the export format and a standard value check is performed. Values must match the types set by the standards and constraint types.
+
+__Note the opposite direction of arrows__
+```
+[VHL] << "path/to/file/vehicles.csv"
 ```
 
 ### Misc Operations
 
-**Count records for Standard**
+Count records for standard
 ```
 count [VHL]
 ```
 
-**Listing Standards**
+Count records for standard with match
+```
+count [VHL] <make "Ford">
+```
+
+Listing Standards
 ```
 stds #Lists Standards
 stds std_name #Shows one Standard
 stds std_name json #Shows Standard as json
+```
+
+
+## In-memory tables
+
+In-memory tables provide redis level functionality that replicates and builds off of standards. In any query, prepend the standard table selector with `$`.
+
+Here's an example :)
+
+```
+#This adds to the table on disk
+[VHL] + ("JKBVNKD167A013982", "Ford", "Explorer")
+
+#This initializes the table with the standard in-memory if not already,
+#and adds the record. Does not effect table on disk.
+#When the program exits, this data is deleted
+
+$[VHL] + ("JKBVNKD167A013982", "Ford", "Explorer")
+
+#Perform the below to load on disk into memory, add record in-memory
+load $[VHL]
+$[VHL] + ("JKBVNKD167A013982", "Ford", "Explorer")
+
+#Perform changes in-memory, to on disk
+sync $[VHL]
 ```
