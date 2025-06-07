@@ -239,3 +239,25 @@ $[VHL] + ("JKBVNKD167A013982", "Ford", "Explorer")
 #Perform changes in-memory, to on disk
 sync $[VHL]
 ```
+
+## Static Values
+
+The standard system provides a quick way to fetch values that developers often code. You can use `$now` which gets the UNIX timestamp. You can use `$epoch` to get the time in milliseconds since epoch. There are many values you can fetch.
+
+- $now - UNIX Timestamp
+- $date - Today's date as YYYY-mm-dd
+- $time - Current system time
+- $timestamp - Seconds from EPOCH
+- $epoch - Milliseconds from EPOCH
+- $tomorrow - UNIX Timestamp for Tomorrow
+- $year - Current Year
+- $month - Current Month
+- $day - Current Day
+- $weekday - Name of Current Day
+- $timezone - System Timezone
+- $user - Current System Username
+- $os - System Operating System Name
+- $cwd - Current Working Directory
+- $pid - Standard System Process ID
+- $home - System Home Directory
+- $uuid - Generate UUIDv4
