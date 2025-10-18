@@ -1,5 +1,8 @@
 alarm: ALM {
+    protected user standard @USR *
     protected name string
     protected timestamp string TMS "$tomorrow" *
     protected urgency int
+    protected repeat bool
+    protected days array
 }

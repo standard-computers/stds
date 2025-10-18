@@ -1,0 +1,8 @@
+person: PER {
+    protected firstname string FNAME *
+    protected middlename string MNAME "UKNOWN" *
+    protected lastname string LNAME *
+    protected birthday string BDAY *
+    private address string ADDR
+    private location string LOC
+}

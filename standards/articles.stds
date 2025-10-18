@@ -1,0 +1,10 @@
+articles: ARTS {
+        protected title string TTL *
+        protected description string DESC *
+        protected link string LNK
+        protected icon string ICN
+        protected content string CNT
+        protected source string SRC
+        protected priority int PR 1
+        protected created string "$now" *
+}

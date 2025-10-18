@@ -1,6 +1,6 @@
 # Standard
 
-A Standard is a database table construct that sets the Standard for how data represents an object. When creating a Standard, save the content with the file extension `.stds`. Each Standard requires its own file, and the Standard Name must be the same as the Standard file name.
+A standard is a database table construct that sets the standard for how data represents an object. When creating a standard, save the content with the file extension `.stds`. Each standard requires its own file, and the standard name must be the same as the file name.
 
 _Starter example_
 
@@ -13,15 +13,18 @@ vehicle: VHL {
 }
 ```
 
-A Standard should always start with the `standard_name: STDREF {...` . Standards will typically be referenced by the Standard reference. Standard’s _columns_, _variables_, or _properties_ are called constraints.
+This standard represents a vehicle, which is the standard name, and can be referenced by `VHL`. The vehicle has a `vin`, `make`, `model` and they represent values you might expect. VIN is a string and **must** be 36 characters long. Make and model must be strings. These variables, called constraints, can be referenced by their shorthand which are the succeeding uppercase letters.
 
-- `Standard_name` - Can only include lowercase letters and underscores.
-- `STDREF` - Can only be uppercase letters, number (Not starting with) and underscores.
+- `standard_name` - Can only include lowercase letters and underscores.
+- `STDREF` - Can only include uppercase letters, numbers (not starting with) and underscores.
+
+A standard should always start with the `standard_name: STDREF {...` . What are frequently known as _columns_, _variables_, or _properties_, are the constraints of the object the standard represents.
 
 ## Constraints
 
+**Format of constraints**
 ```
-[ACCESS_TYPE] CONST_NAME [CONST_TYPE [:LENGTH[!]]] [NULL] [CONST_REF] ["DEFAULT_VALUE" | "/REGEX/"] [*]
+ACCESS_TYPE CONST_NAME [CONST_TYPE [:LENGTH[!]]] [NULL || STD_REF] [CONST_REF] ["DEFAULT_VALUE" | "/REGEX/"] [*]
 ```
 
 - `ACCESS_TYPE` - Constraint access type (scope)
@@ -30,59 +33,72 @@ A Standard should always start with the `standard_name: STDREF {...` . Standards
     - `public` - public – Allows manipulation from any point or user. Public constraints have native getters and setters.
     - `global` - Can be read from anywhere but only manipulated from within package
 
-- `VAR_NAME` - Name of constraint. Only lowercase letters, numbers, or underscores. 
-- `VAR_TYPE` - Standard variable types: `string`, `bool`, `int`, `double`, `char`, `array`, `Standard`
-- `VAR_LENGTH` - Number of characters accepted as integer.
-  -  The optional char `!` means the constraint value provided is equal to the `VAR_LENGTH` provided. The record will be rejected if length doesn't match.
-- `VAR_REF` - Constraint reference allows you to shorthand Standards and constraints. If Standard ‘school’ is `SCH` and has a constraint ‘street’ as `SADDR`, in many cases we can access this as SCH.ADDR.
-- `"DEFAULT_VALUE"` - Default value. If a value is not provided for this constraint, the value listed will be used. If you provide no value, the value saved will be `NULL`
+- `CONST_NAME` - Name of constraint. Only lowercase letters, numbers, or underscores. 
+- `CONST_TYPE` - Standard variable types: `string`, `bool`, `int`, `double`, `array`, `standard`. If the type is `standard`, follow the constraint name with `@STDREF` to set the standard taht the constraint should reference.
+- `LENGTH` - Max number of characters accepted as integer.
+  -  The optional char `!` means the constraint value provided must be equal to the `LENGTH` provided. The record will be rejected if length doesn't match.
+- `CONST_REF` - Constraint reference allows you to shorthand constraints. If standard ‘school’ is `SCH` and has a constraint ‘street’ as `SADDR`, in many cases we can access this as SCH.ADDR.
+- `"DEFAULT_VALUE"` - Default value wrapped in quotes. If a value is not provided for this constraint, the default value is `NULL`.
 
 ## Extending Standards
 
-Like other coding languages for objects, you can extend a Standard to duplicate a table for separate use. A classic example is vehicle applications and types.
+Like other coding languages for objects, you can extend a standard to duplicate a standard/table for separate use. Let's extend the vehicle standard.
 
 ```
 truck: TRCK: @VHL
 ```
 
-We can also extend by appending constraints.
+The standard `truck` now has the constraints of `vehicle`. Extend the standard further by appending constraints.
 
 ```
 truck: TRCK: @VHL {
-    protected owner Standard @PER OWNR *
-    protected double max_weight MXWGHT
+    protected owner string OWNR *
+    protected max_weight double MXWGHT
 }
 ```
 
-In this example, `TRCK` will have the same constraints as `VHL` in addition to the `max_weight` constraint.
+In this example, `truck` will have the same constraints as `VHL` in addition to the `owner` and `max_weight` constraint.
 
 ## Standards as Constraints
 
-In other databases or languages, you are able to join properties or perform aggregations. We can do this in Standard by creating a constraint of type `standard`.
+In other databases or languages, you are able to join properties or perform aggregations. To do this in Standard, create a constraint of type `standard` followed by `@STDREF`. What if a truck has an owner that is a person?
 
+**Person standard**
 ```
-truck: TRCK: @VHL {
-    protected owner Standard @PER OWNR *
-    protected double max_weight MXWGHT
+person: PER {
+    protected firstname string FNAME *
+    protected middlename string MNAME "UKNOWN" *
+    protected lastname string LNAME *
+    protected birthday string BDAY *
+    private address string ADDR
+    private location string LOC
 }
 ```
 
-Now when accessing the `owner` constraint, you can access it like `@USR` or `OWNR`. When this record is saved, the constraint value is the record id of the parent Standard record.
+```
+truck: TRCK: @VHL {
+    protected owner standard @PER OWNR *
+    protected max_weight double MXWGHT
+}
+```
+
+Now when accessing the `owner` constraint, you can access it like `owner` or `OWNR`. You can also access the constraints of the standard the parent constraint references. When a record is saved for the `truck` standard, the `owner` constraint value is the id of the record the constraint is referencing.
 
 ```
-#Get Trucks where vehicle model is 'Tesla', limit 1
-foundTruck [TRCK] <VHL.MK "Tesla" 1>
+#Get Trucks where vehicle model is 'Tesla'
+foundTruck [TRCK] <VHL.MK "Tesla">
+
 print foundTruck OWNR FNAME #Prints truck owner's first name
 print foundTruck owner firstname #Also prints truck owner's first name
 print foundTruck USR firstname #Again
 ```
 
-If your Standard references the same Standard in more than one constraint, Standard will select the first constraint that uses that Standard.
+If your standard references the same standard in more than one constraint, Standard will select the first constraint that uses that standard.
 
 ```
 truck: TRCK: @VHL {
-    protected owner Standard @PER OWNR *
-    protected driver Standard @PER DRVR *
+    protected owner standard @PER OWNR *
+    protected driver standard @PER DRVR *
 }
 
 #Ini empty object
@@ -94,60 +110,66 @@ print truck driver firstname #Now we print driver's firstname
 
 ## Arrays
 
-Arrays are more dynamic in Standard. If you want an array of Standards as a constraint, simply use `array` type instead of Standard and specify the Standard as normal.
+Arrays are more dynamic in Standard. If you want an array of standards as a constraint, simply use `array` type instead of Standard and specify the standard as normal. All record ids passed during creation of a record for this standard must only reference records of the standard referenced in the constraint.
 
 ```
 event: EVNT {
     protected invites array @PER INVTS
 }
+```
 
-evt @EVNT
+Access the elements of the array by prepending the constraint selector in your query with `.INDEX` where `INDEX` is an integer of the index of the desired element, starting from 0 of coarse. 
 
-print evt INVTS.0 #Print first invite
+```
+evet @EVNT
+
+print evet INVTS.0 #Print first invite
 ```
 
 ## Definitions
 
-Definitions in Standard serve as enumerations. You can combine definitions with a Standard if that definition should belong.
+Definitions in Standard serve as enumerations. You can combine definitions with a standard if that is a property of the object being represented and must be a certain value. Standard definitions are saved by themselves like standards and the header is the same as standards. The content of the definition are separate lines of definition values.
 
+**Definition value format**
 ```
-vehicle_type: VHLTP {
+def DEF_VAL_NAME DEF_VAL_VAL
+```
+
+The definition value name is to reference the value. The value provided for the definition value is the actual value that is transferred to the record. Let's make a vehicle type for the vehicle standard.
+```
+vehicle_type: VTP {
   def sedan "SEDAN"
   def suv "SUV"
 }
 ```
 
 You can implement a definition by doing the following...
-
 ```
 vehicle: VHL {
     private vin string:36! VN *
     protected make string MK *
     protected model string MDL *
-    protected type standard @VHLTP TP #Has reference VHLTP and TP
+    protected type standard @VTP TP
 }
 ```
 
-Standard code implementation (`.std`)...
+Below is the Standard Code implementation (`.std`). As you'll see in this standard, a record will be created and using the definition value. If a value is provided that does not exist in the definition referenced in the standard, the record will be rejected. The second record created will import the value from the definition where the definition value name is `sedan`.
 ```
-#As you'll see in this standard, the record will be created and saved in variable 'myCar'
 
-#Using standard def value
-myCar [VHL] + ("UVOTVGHYKLPCONLSZ", "Toyota", "Camry", "SEDAN")
+#Using standard def value, with value check
+[VHL] + ("UVOTVGHYKLPCONLSZ", "Toyota", "Camry", "SEDAN")
 
 #Or using standard def name, pulls in that value
-myCar [VHL] + ("UVOTVGHYKLPCONLSZ", "Toyota", "Camry", sedan)
+[VHL] + ("UVOTVGHYKLPCONLSZ", "Toyota", "Camry", sedan)
 ```
-This restricts the value provided for constraint 'type' to the values defined in the 'vehicle_type' standard. If the value is not defined in the standard definitions, the record creation will fail.
 
 ## Querying
 
-When querying Standards, you will almost always use the Standard Reference.
-Queries performed with `(..)` require exact Standard or record match. Queries using `<...>` format are for querying Standards by constraints or definitions.
+As eluded, standards are referenced in Standard Code or queries as `[ standard_name || STDREF ]`. The value in brackets is case-sensitive. Any additional action indicated with arguments in your query will follow this standard selector.
 
-### Adding Records
+### Creating Records
 
-Using standard constructor
+Create a record for the vehicle standard by succeeding the standard selector with a `+ (CONST_VAL_1, [...])`. This method of creating with parenthesis is also the constructor for a standard record.
 ```
 [VHL] + ("JKBVNKD167A013982", "Ford", "Explorer")
 ```
