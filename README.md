@@ -15,7 +15,7 @@ vehicle: VHL {
 
 This standard represents a vehicle, which is the standard name, and can be referenced by `VHL`. The vehicle has a `vin`, `make`, `model` and they represent values you might expect. VIN is a string and **must** be 36 characters long. Make and model must be strings. These variables, called constraints, can be referenced by their shorthand which are the succeeding uppercase letters.
 
-- `standard_name` - Can only include lowercase letters and underscores.
+- `[!] standard_name` - Can only include lowercase letters and underscores. Precede the standard name with an optional `!` to enforce record history keeping for this standard. 
 - `STDREF` - Can only include uppercase letters, numbers (not starting with) and underscores.
 
 A standard should always start with the `standard_name: STDREF {...` . What are frequently known as _columns_, _variables_, or _properties_, are the constraints of the object the standard represents.
@@ -237,6 +237,10 @@ stds std_name #Shows one Standard
 stds std_name json #Shows Standard as json
 ```
 
+Purge records for standard (delete all records)
+```
+purge [VHL]
+```
 
 ## In-memory tables
 
