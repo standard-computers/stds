@@ -1,0 +1,198 @@
+{
+  "name": "Standard",
+  "scopeName": "source.standard",
+  "fileTypes": ["stds", "std"],
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#header" },
+    { "include": "#blocks" },
+    { "include": "#constraints" },
+    { "include": "#definitions" },
+    { "include": "#stdref" },
+    { "include": "#operators" },
+    { "include": "#keywords" },
+    { "include": "#numbers" },
+    { "include": "#strings" },
+    { "include": "#regex" },
+    { "include": "#brackets" },
+    { "include": "#variables" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.standard",
+          "match": "#.*$"
+        }
+      ]
+    },
+
+    "header": {
+      "patterns": [
+        {
+          "name": "meta.standard.header",
+          "begin": "^(\\!?)([a-z_][a-z0-9_]*)(\\s*):\\s*([A-Z_][A-Z0-9_]*)\\s*",
+          "beginCaptures": {
+            "1": { "name": "keyword.operator.modifier.standard" },
+            "2": { "name": "entity.name.type.standard" },
+            "3": { "name": "punctuation.separator.key-value.standard" },
+            "4": { "name": "support.type.stdref.standard" }
+          },
+          "end": "(?=^\\S|\\Z)",
+          "patterns": [
+            { "include": "#extends" },
+            { "include": "#blocks" },
+            { "include": "#comments" }
+          ]
+        }
+      ]
+    },
+
+    "extends": {
+      "patterns": [
+        {
+          "name": "meta.standard.extends",
+          "match": "(:)\\s*@([A-Z_][A-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "punctuation.separator.inheritance.standard" },
+            "2": { "name": "support.type.stdref.standard" }
+          }
+        }
+      ]
+    },
+
+    "blocks": {
+      "patterns": [
+        {
+          "name": "meta.block.standard",
+          "begin": "\\{",
+          "beginCaptures": { "0": { "name": "punctuation.section.block.begin.standard" } },
+          "end": "\\}",
+          "endCaptures": { "0": { "name": "punctuation.section.block.end.standard" } },
+          "patterns": [
+            { "include": "#definitions" },
+            { "include": "#constraints" },
+            { "include": "#comments" }
+          ]
+        }
+      ]
+    },
+
+    "constraints": {
+      "patterns": [
+        {
+          "name": "meta.constraint.standard",
+          "match": "\\b(private|protected|public|global)\\b\\s+([a-z_][a-z0-9_]*)\\s+(string|bool|int|double|char|array|standard)(?::(\\d+)(!?)\\b)?(?:\\s*@([A-Z_][A-Z0-9_]*))?\\s+([A-Z_][A-Z0-9_]*)\\b(?:\\s+(NULL|@[A-Z_][A-Z0-9_]*))?(?:\\s+(\"(?:[^\"\\\\]|\\\\.)*\"|/(?:[^/\\\\]|\\\\.)*/))?(?:\\s*(\\*))?",
+          "captures": {
+            "1": { "name": "storage.modifier.access.standard" },
+            "2": { "name": "variable.other.constant-name.standard" },
+            "3": { "name": "storage.type.standard" },
+            "4": { "name": "constant.numeric.length.standard" },
+            "5": { "name": "keyword.operator.length.exact.standard" },
+            "6": { "name": "support.type.stdref.standard" },
+            "7": { "name": "constant.other.shortref.standard" },
+            "8": { "name": "constant.language.null-or-stdref.standard" },
+            "9": { "name": "string.or.regex.default.standard" },
+            "10": { "name": "keyword.operator.required.standard" }
+          }
+        }
+      ]
+    },
+
+    "definitions": {
+      "patterns": [
+        {
+          "name": "meta.definition.block.standard",
+          "begin": "\\bdef\\b",
+          "beginCaptures": { "0": { "name": "keyword.other.definition.standard" } },
+          "end": "$",
+          "patterns": [
+            { "match": "\\b[a-z_][a-z0-9_]*\\b", "name": "constant.other.enum-key.standard" },
+            { "include": "#strings" }
+          ]
+        }
+      ]
+    },
+
+    "stdref": {
+      "patterns": [
+        {
+          "name": "storage.type.stdref.use.standard",
+          "match": "@[A-Z_][A-Z0-9_]*"
+        }
+      ]
+    },
+
+    "operators": {
+      "patterns": [
+        { "name": "keyword.operator.assignment.standard", "match": ":" },
+        { "name": "keyword.operator.record.create.standard", "match": "\\b\\[([A-Z_][A-Z0-9_]*)\\]\\s*\\+" },
+        { "name": "keyword.operator.record.delete.standard", "match": "\\b\\[([A-Z_][A-Z0-9_]*)\\]\\s*-" },
+        { "name": "keyword.operator.query.angle.standard", "match": "<|>" },
+        { "name": "keyword.operator.redirect.export.standard", "match": ">>" },
+        { "name": "keyword.operator.redirect.import.standard", "match": "<<" },
+        { "name": "keyword.operator.at.standard", "match": "\\bat\\b" }
+      ]
+    },
+
+    "keywords": {
+      "patterns": [
+        { "match": "\\b(count|LIMIT)\\b", "name": "keyword.other.standard" },
+        { "match": "\\bprint\\b", "name": "support.function.print.standard" }
+      ]
+    },
+
+    "numbers": {
+      "patterns": [
+        { "name": "constant.numeric.standard", "match": "\\b\\d+(?:\\.\\d+)?\\b" }
+      ]
+    },
+
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.standard",
+          "begin": "\"",
+          "beginCaptures": { "0": { "name": "punctuation.definition.string.begin.standard" } },
+          "end": "\"",
+          "endCaptures": { "0": { "name": "punctuation.definition.string.end.standard" } },
+          "patterns": [
+            { "name": "constant.character.escape.standard", "match": "\\\\." }
+          ]
+        }
+      ]
+    },
+
+    "regex": {
+      "patterns": [
+        {
+          "name": "string.regexp.standard",
+          "begin": "/",
+          "beginCaptures": { "0": { "name": "punctuation.definition.regex.begin.standard" } },
+          "end": "/",
+          "endCaptures": { "0": { "name": "punctuation.definition.regex.end.standard" } },
+          "patterns": [
+            { "name": "constant.character.escape.standard", "match": "\\\\." }
+          ]
+        }
+      ]
+    },
+
+    "brackets": {
+      "patterns": [
+        { "name": "punctuation.section.braces.standard", "match": "[\\{\\}]" },
+        { "name": "punctuation.section.brackets.standard", "match": "[\\[\\]]" },
+        { "name": "punctuation.separator.comma.standard", "match": "," },
+        { "name": "punctuation.separator.dot.standard", "match": "\\." },
+        { "name": "punctuation.definition.group.standard", "match": "[()]" }
+      ]
+    },
+
+    "variables": {
+      "patterns": [
+        { "name": "variable.other.object.standard", "match": "\\b[a-z_][a-z0-9_]*\\b" },
+        { "name": "constant.other.stdref.standard", "match": "\\b[A-Z_][A-Z0-9_]*\\b" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+ "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>name</key>
+    <string>Standard Language</string>
+    <key>scopeName</key>
+    <string>source.standard</string>
+    <key>fileTypes</key>
+    <array>
+        <string>std</string>
+        <string>stds</string>
+    </array>
+    <key>uuid</key>
+    <string>2E8E19A4-9C8D-4E34-BF27-14F9AA1FDE01</string>
+    <key>syntaxes</key>
+    <array>
+        <string>syntaxes/standard.tmLanguage.json</string>
+    </array>
+</dict>
+</plist>

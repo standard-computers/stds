@@ -202,11 +202,27 @@ Limited Find
 ```
 [VHL] <make "Ford", LIMIT 10>
 ```
-### Exporting Records
 
-You can export records very easily. You can choose from JSON, csv, and XML.
+### Finding Records
+
+Unlimited find
 ```
-[VHL] >> "path/to/file/vehicles.csv"
+[VHL] <vin "JKBVNKD167A013982">
+```
+
+Limited Find
+```
+[VHL] <make "Ford", LIMIT 10>
+```
+
+### Working with Arrays
+
+If a constraint is an array, we can access elements within that array using `VAR.INDEX`.
+```
+varArray [array]
+
+#Print first element in array
+print varArray.0
 ```
 
 ### Importing Records
@@ -251,10 +267,6 @@ Here's an example :)
 ```
 #This adds to the table on disk
 [VHL] + ("JKBVNKD167A013982", "Ford", "Explorer")
-
-#This initializes the table with the standard in-memory if not already,
-#and adds the record. Does not effect table on disk.
-#When the program exits, this data is deleted
 
 $[VHL] + ("JKBVNKD167A013982", "Ford", "Explorer")
 
